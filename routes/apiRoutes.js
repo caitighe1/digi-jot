@@ -5,7 +5,7 @@ const router = require('express').Router();
 const path = require('path');
 
 router.get('/notes', function(request, response) {
-    res.json(db);
+    response.json(db);
 });
 
 router.post('/notes', function(request, response) {
