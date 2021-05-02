@@ -7,7 +7,7 @@ const store = require('../db/store.js');
 // routes using GET POST DELETE
 router.get('/notes', function(req, res){
     store
-        .getnotes()
+        .getnotes(req)
         .then(notes => res.json(notes))
         .catch(err => res.status(500).json(err));
 });

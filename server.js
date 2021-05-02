@@ -1,21 +1,25 @@
-//created the modules being used
-
-const express = require('express');
-const htmlRoutes = require('./routes/htmlRoutes.js');
-const apiRoutes = require('./routes/apiRoutes.js');
-
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// middleware to parse JSON data
+//set up initial port
+const PORT = process.env.PORT || 8080;
+
+
+//JSON to express data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// paths for routes
-app.use(express.static('./public'));
-app.use('/api', apiRoutes);
-app.use('/', htmlRoutes);
+//Allows app to provide static files from dir
+app.use(express.static("public"));
 
-//listener
-app.listen(PORT, () =>
-    console.log(`Listening on PORT : ${PORT}`));
+//routing
+const apiRoutes = require("./routes/apiRoutes");
+app.use("/api", apiRoutes);
+require("./routes/htmlRoutes")(app);
+
+//server listening @
+app.listen(PORT, function() {
+  console.log("App listening on PORT: " + PORT);
+});
