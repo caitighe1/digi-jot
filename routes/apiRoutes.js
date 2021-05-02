@@ -27,30 +27,3 @@ router.delete('/notes/:id', function(req, res) {
 });
 
 module.exports = router;
-
-
-
-
-
-
-const db = require('./db/db.json');
-const fs = require('fs');
-
-module.exports = function(app) {
-
-function writeDB(note) {
-    note = JSON.stringify(note);
-    console.log(note);
-
-//puts notes in the JSON file
-
-    fs.writeFileSync('../db/db.json/', note, function(err) {
-        if (err) {
-            return console.log(err);
-        }})
-    }
-};
-
-app.get('/api/notes', function(req, res) {
-
-})
