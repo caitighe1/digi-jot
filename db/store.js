@@ -1,6 +1,7 @@
 const util = require('util');
 const fs = require('fs');
 
+
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -15,25 +16,37 @@ class Store {
     }
 
     getNotes() {
-        return this.read().then(notes => {
-            let parsedNotes = JSON.parse(notes);
+        return this.read().then((notes => {
+            let parsedNotes;
+            
+            try {
+                parsedNotes = [].concat(JSON.parse(notes));
+            } catch (err) {
+                parsedNotes = [];
+            }
             return parsedNotes;
-        });
+        }))
     }
 
     addNote(note) {
-        const newNote = { title: note.title, text: note.text};
+        const { title, text } = note;
+
+        if (!title || !text) {
+            throw new Error("Cannot be blank bud");
+        }
+
+        const newNote = { title, text };
 
         return this.getNotes()
-            .then(notes => [...notes, newNote])
-            .then(updatedNotes => this.write(udpatedNotes))
+            .then((notes) => [...notes, newNote])
+            .then((updatedNotes) => this.write(updatedNotes))
             .then(() => newNote);
     }
 
-    removeNote(id) {
+    removeNote() {
         return this.getNotes()
-            .then(notes => notes.filter(note => note.id !== id))
-            .then(filteredNotes => this.write(filteredNotes));
+        .then((notes) => notes.filter((note) => note))
+        .then((filteredNotes) => this.write(filteredNotes));
     }
 }
 
